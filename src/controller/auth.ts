@@ -1,20 +1,23 @@
 import { NextFunction, Request, Response } from "express";
-import authService from "../services/auth";
-class authController {
-    static register(req: Request, res: Response, next: NextFunction){
+import AuthService from "../services/auth";
+class AuthController {
+    static async register(req: Request, res: Response, next: NextFunction) {
         try {
-            
+            const token = await AuthService.register(req.body);
+            res.status(201).json({ message: "Usuario registrado", token: token });
+
         } catch (error) {
-            
+            next(error)
         }
     }
-    static login(req: Request, res: Response, next: NextFunction){
+    static async login(req: Request, res: Response, next: NextFunction) {
         try {
-            
+
         } catch (error) {
-            
+            next(error)
+
         }
     }
 }
 
-export default authController
+export default AuthController
