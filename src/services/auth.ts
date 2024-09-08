@@ -18,10 +18,10 @@ class AuthService {
     }) {
         try {
             const user = await UsersService.getByEmail(data.email)
-            if (user){
+            if (user) {
                 const error = new Error("Usuario ya registrado");
                 error["statusCode"] = 400
-        
+
                 throw error
             };
             const userId = await UsersService.create({
@@ -29,6 +29,9 @@ class AuthService {
                 email: data.email,
             });
             if (userId == false) {
+                const error = new Error("Todos los datos son requeridos");
+                error["statusCode"] = 400
+
                 throw error
             }
             const authDb = await AuthModel.read();
@@ -47,9 +50,25 @@ class AuthService {
             throw error
         }
     }
-    static async login(data: {}) {
+    static async login(data: { email: string, password: string }) {
         try {
+            const user = await UsersService.getByEmail(data.email)
+            if (!user) {
+                const error = new Error("Usuario no encontrado");
+                error["statusCode"] = 400
 
+                throw error
+            };
+            const authDb = await AuthModel.read()
+            const userAuth = authDb.auth.find((auth) => auth.userId == user.id)
+            if(userAuth.password != createHash(data.password)){
+                const error = new Error("Contraseña incorrecta");
+                error["statusCode"] = 400
+
+                throw error
+            }
+            
+            return userAuth.token
         } catch (error) {
             throw error
 
