@@ -3,30 +3,19 @@ import SubjectsService from "../services/subjects";
 class SubjectsController {
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            SubjectsService.getAll(req.query)
+            const data = await SubjectsService.getAll(req.query);
+
+            res.status(200).json({ data: data })
 
         } catch (error) {
             next(error)
         }
     }
-    static async getById(req: Request, res: Response, next: NextFunction) {
-        try {
-            SubjectsService.getById(req.params)
-
-        } catch (error) {
-            next(error)
-
-        }
-    }
+   
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await SubjectsService.create(req.body)
-            if (data == false) {
-                const error = new Error("Datos invalidos");
-                error["statusCode"] = 400
-
-                throw error
-            }
+            
             res.status(201).json({ data: data })
 
 
@@ -37,7 +26,9 @@ class SubjectsController {
     }
     static async updateById(req: Request, res: Response, next: NextFunction) {
         try {
-            SubjectsService.updateById(req.params)
+            await SubjectsService.updateById(req.params.id, req.body)
+            res.status(200).json({ message: "Producto modificado con exito" })
+
 
         } catch (error) {
             next(error)
@@ -46,7 +37,8 @@ class SubjectsController {
     }
     static async deleteById(req: Request, res: Response, next: NextFunction) {
         try {
-            SubjectsService.deleteById(req.params)
+            await SubjectsService.deleteById(req.params.id)
+            res.status(200).json({ message: "Producto eliminado con exito" })
 
         } catch (error) {
             next(error)

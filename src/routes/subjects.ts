@@ -8,10 +8,10 @@ const subjectsRouter = Router()
 subjectsRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
     SubjectsController.getAll(req, res, next)
 })
-subjectsRouter.get("/:id", (req: Request, res: Response, next: NextFunction) => {
-    SubjectsController.getById(req, res, next)
+// subjectsRouter.get("/:id", (req: Request, res: Response, next: NextFunction) => {
+//     SubjectsController.getById(req, res, next)
 
-})
+// })
 subjectsRouter.post("/", (req: Request, res: Response, next: NextFunction) => {
     SubjectsController.create(req, res, next)
 

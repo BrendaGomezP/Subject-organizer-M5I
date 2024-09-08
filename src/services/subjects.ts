@@ -11,27 +11,31 @@ class SubjectsService {
     static async getAll(where) {
         try {
 
+            const { subjects } = await SubjectsModel.read();
+
+
+            const subjectsFiltered = subjects.filter((subject) => subject.subject.includes(where.subject))
+
+            return subjectsFiltered
 
         } catch (error) {
             throw error
         }
     }
-    static async getById(id) {
-        try {
 
-
-        } catch (error) {
-            throw error
-
-        }
-    }
     static async create(data: Subjects) {
-        try { const subjectsDb = await SubjectsModel.read()
-            const result = subjectsValidator(data)
-            if(!result.success){ return false}
-            const subject = result.data
+        try {
+            const subjectsDb = await SubjectsModel.read()
+            // const result = subjectsValidator(data) // no puedo
+            // if(!result.success){
+            //     const error = new Error("Datos invalidos");
+            //     error["statusCode"] = 400
+
+            //     throw error
+            // }
+            // const subject = result.data
             const id = uuidv4()
-            subjectsDb.subjects.push({
+            const newSubject = {
                 id: id,
                 subject: data.subject,
                 estate: data.estate,
@@ -44,11 +48,12 @@ class SubjectsService {
                 tp1: data.tp1,
                 tp2: data.tp2,
                 note: data.note
-            
-            })
+
+            }
+            subjectsDb.subjects.push(newSubject)
             SubjectsModel.write(subjectsDb)
 
-            return subject
+            return newSubject
 
 
 
@@ -57,16 +62,44 @@ class SubjectsService {
 
         }
     }
-    static async updateById(id) {
+    static async updateById(id:string, data: Subjects) {
         try {
+            const db = await SubjectsModel.read();
 
+            let subjects = db.subjects.map((subject) => {
+                if (subject.id == id) { return { ...subject, ...data } }
+                else return subject})
+            
+            
+      if (!subjects) {
+        const error = new Error("Materia no encontrado");
+        error["statusCode"] = 404;
+
+        throw error;
+      }
+
+      db.subjects = subjects
+
+      await SubjectsModel.write(db);
+
+                   
         } catch (error) {
             throw error
 
         }
     }
-    static async deleteById(id) {
+    static async deleteById(id: string) {
         try {
+            const db = await SubjectsModel.read()
+            const subjects = db.subjects.filter((subject) => subject.id != id)
+            if (db.subjects.length == subjects.length) {
+                const error = new Error("Producto no encontrado");
+                error["statusCode"] = 404;
+
+                throw error;
+            }
+            db.subjects = subjects
+            await SubjectsModel.write(db)
 
         } catch (error) {
             throw error
