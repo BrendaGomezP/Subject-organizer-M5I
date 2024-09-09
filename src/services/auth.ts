@@ -46,6 +46,7 @@ class AuthService {
             AuthModel.write(authDb);
             return token;
 
+            
         } catch (error) {
             throw error
         }
