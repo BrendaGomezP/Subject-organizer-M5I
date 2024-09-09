@@ -37,6 +37,7 @@ class SubjectsService {
                 throw error
             }
             const subject = result.data
+            const averageFunc = average(subject.calification1, subject.calification2)
             const id = uuidv4()
             const newSubject = {
                 id: id,
@@ -47,7 +48,7 @@ class SubjectsService {
                 final: subject.final,
                 calification1: subject.calification1,
                 calification2: subject.calification2,
-                average: average(subject.average, subject.average),
+                average: averageFunc,
                 tp1: subject.tp1,
                 tp2: subject.tp2,
                 note: subject.note

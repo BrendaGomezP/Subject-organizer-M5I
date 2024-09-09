@@ -1,1 +1,41 @@
-{"subjects":[{"id":"e2c93993-9cb6-4048-bfd5-3e46459e0a4c","subject":"Algebra","estate":"terminado","exam1":"2024-06-20","calification1":7},{"id":"642e0a13-5207-44ab-8695-bbb04fd5b5f6","subject":"Analisis matematico","estate":"Cursando","exam1":"2024-06-20","exam2":"2024-07-30","calification1":7,"calification2":5,"note":"estudiar mas"},{"id":"007237ac-3af1-4081-9517-bf744a89821d","subject":"Fisica","estate":"Cursando","exam1":"2024-07-16","exam2":"2024-08-30","calification1":6,"calification2":4,"average":null,"note":"estudiar mas"},{"id":"37fc2ee4-80a1-4f00-941d-724bb0846c0e","subject":"Programacion","estate":"Cursando","exam1":"2024-10-10","calification1":10,"average":null,"note":"si se puede"}]}
+{
+    "subjects": [
+        {
+            "id": "e2c93993-9cb6-4048-bfd5-3e46459e0a4c",
+            "subject": "Algebra",
+            "estate": "terminado",
+            "exam1": "2024-06-20",
+            "calification1": 8
+        },
+        {
+            "id": "642e0a13-5207-44ab-8695-bbb04fd5b5f6",
+            "subject": "Analisis matematico",
+            "estate": "Cursando",
+            "exam1": "2024-06-20",
+            "exam2": "2024-07-30",
+            "calification1": 7,
+            "calification2": 5,
+            "note": "estudiar mas"
+        },
+        {
+            "id": "3ed6b79d-cb40-4290-939b-5e7602b95601",
+            "subject": "Fisica",
+            "estate": "Cursando",
+            "exam1": "2024-07-16",
+            "exam2": "2024-08-30",
+            "calification1": 6,
+            "calification2": 4,
+            "average": 5,
+            "note": "estudiar mas"
+        },
+        {
+            "id": "ed4eb916-f329-459f-8b34-03ba1e330793",
+            "subject": "Programacion",
+            "estate": "Cursando",
+            "exam1": "2024-10-10",
+            "calification1": 10,
+            "average": null,
+            "note": "si se puede"
+        }
+    ]
+}
