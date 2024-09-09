@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import AuthModel from "../models/auth";
+import AuthModel from "../model/auth";
 
 async function checkToken(req: Request, res: Response, next: NextFunction) {
   const token = req.query.token;

@@ -6,13 +6,16 @@ import { Subjects } from "../interfaces/subjects"
 import { subjectsValidator } from "../schemas/subjects"
 // uuid
 import { v4 as uuidv4 } from "uuid"
+// average function
+import { average } from "../utils/average"
 
 class SubjectsService {
     static async getAll(where) {
         try {
-
             const { subjects } = await SubjectsModel.read();
-
+            if (Object.keys(where).length == 0) {
+                return subjects
+            }
 
             const subjectsFiltered = subjects.filter((subject) => subject.subject.includes(where.subject))
 
@@ -26,32 +29,33 @@ class SubjectsService {
     static async create(data: Subjects) {
         try {
             const subjectsDb = await SubjectsModel.read()
-            // const result = subjectsValidator(data) // no puedo
-            // if(!result.success){
-            //     const error = new Error("Datos invalidos");
-            //     error["statusCode"] = 400
+            const result = subjectsValidator(data)
+            if (!result.success) {
+                const error = new Error("Datos invalidos");
+                error["statusCode"] = 400
 
-            //     throw error
-            // }
-            // const subject = result.data
+                throw error
+            }
+            const subject = result.data
             const id = uuidv4()
             const newSubject = {
                 id: id,
-                subject: data.subject,
-                estate: data.estate,
-                exam1: data.exam1,
-                exam2: data.exam2,
-                final: data.final,
-                calification1: data.calification1,
-                calification2: data.calification2,
-                average: data.average,
-                tp1: data.tp1,
-                tp2: data.tp2,
-                note: data.note
+                subject: subject.subject,
+                estate: subject.estate,
+                exam1: subject.exam1,
+                exam2: subject.exam2,
+                final: subject.final,
+                calification1: subject.calification1,
+                calification2: subject.calification2,
+                average: average(subject.average, subject.average),
+                tp1: subject.tp1,
+                tp2: subject.tp2,
+                note: subject.note
 
             }
+
             subjectsDb.subjects.push(newSubject)
-            SubjectsModel.write(subjectsDb)
+            await SubjectsModel.write(subjectsDb)
 
             return newSubject
 
@@ -62,27 +66,28 @@ class SubjectsService {
 
         }
     }
-    static async updateById(id:string, data: Subjects) {
+    static async updateById(id: string, data: Subjects) {
         try {
             const db = await SubjectsModel.read();
 
             let subjects = db.subjects.map((subject) => {
                 if (subject.id == id) { return { ...subject, ...data } }
-                else return subject})
-            
-            
-      if (!subjects) {
-        const error = new Error("Materia no encontrado");
-        error["statusCode"] = 404;
+                else return subject
+            })
 
-        throw error;
-      }
 
-      db.subjects = subjects
+            if (!subjects) {
+                const error = new Error("Materia no encontrada");
+                error["statusCode"] = 404;
 
-      await SubjectsModel.write(db);
+                throw error;
+            }
 
-                   
+            db.subjects = subjects
+
+            await SubjectsModel.write(db);
+
+
         } catch (error) {
             throw error
 
@@ -90,10 +95,14 @@ class SubjectsService {
     }
     static async deleteById(id: string) {
         try {
+            if(!id){
+                const error = new Error("El id es requerido");
+                error["statusCode"] = 400; 
+            }
             const db = await SubjectsModel.read()
             const subjects = db.subjects.filter((subject) => subject.id != id)
             if (db.subjects.length == subjects.length) {
-                const error = new Error("Producto no encontrado");
+                const error = new Error("Materia no encontrada");
                 error["statusCode"] = 404;
 
                 throw error;
